@@ -17,12 +17,14 @@ def downloadData(url):
     return response
 
 
-def processData(data=downloadData(URL)):
+def processData(data):
+
+    error_logger = logging.getLogger('assignment2')
 
     new_data = {}
+
     counter = 1
     csv_data = csv.DictReader(data)
-    error_logger = logging.getLogger('assignment2')
 
     for row in csv_data:
         try:
@@ -35,7 +37,7 @@ def processData(data=downloadData(URL)):
                     name = val
             new_data[id_num] = (name, birthday)
         except Exception:
-            error_logger.error('Error processing line #{} for ID #{}'.format(
+            error_logger.error(' Error processing line #{} for ID #{}.'.format(
                 csv_data.line_num, counter))
             counter += 1
             continue
@@ -58,4 +60,36 @@ def displayPerson(id_num, personData):
         print err
 
 
-def main()
+def main():
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument('url', type=str,
+                        help='Please enter a link to a CSV file.')
+    args = parser.parse_args()
+
+    logging.basicConfig(filename='error.log', level=logging.ERROR)
+
+    try:
+        csvData = downloadData(args.url)
+    except Exception:
+        print 'ERROR: Something went wrong...'
+        return
+
+    personData = processData(csvData)
+
+    while True:
+        try:
+            id_input = raw_input('Enter a user ID for lookup:')
+
+            if int(id_input) <= 0:
+                break
+
+            displayPerson(id_input, personData)
+        except ValueError:
+            print 'Only integer values are accepted.'
+        except Exception as err:
+            print err
+
+
+if __name__ == '__main__':
+    main()
