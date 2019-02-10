@@ -1,7 +1,7 @@
 # IS211_Assignment2
 
 ## Use:
-Pass a valid URL linking a CSV file into the *`url`* parameter. 
+Pass a valid URL linking to a CSV file into the *`url`* parameter. 
 ```sh
  # From the command line
  python assignment2.py https://s3.amazonaws.com/cuny-is211-spring2015/birthdays100.csv
