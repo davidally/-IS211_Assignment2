@@ -8,8 +8,6 @@ import logging
 import argparse
 from pprint import pprint
 
-URL = 'https://s3.amazonaws.com/cuny-is211-spring2015/birthdays100.csv'
-
 
 def downloadData(url):
 
@@ -64,7 +62,7 @@ def main():
 
     parser = argparse.ArgumentParser()
     parser.add_argument('url', type=str,
-                        help='Please enter a link to a CSV file.')
+                        help='Enter a link to a valid CSV file.')
     args = parser.parse_args()
 
     logging.basicConfig(filename='error.log', level=logging.ERROR)
@@ -79,7 +77,7 @@ def main():
 
     while True:
         try:
-            id_input = raw_input('Enter a user ID for lookup:')
+            id_input = raw_input('Enter a user ID for lookup: ')
 
             if int(id_input) <= 0:
                 break
