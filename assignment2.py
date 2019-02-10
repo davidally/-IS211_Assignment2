@@ -49,9 +49,9 @@ def processData(data):
 def displayPerson(id_num, personData):
 
     try:
-        user_id = id_num
-        name = personData[0]
-        birthday = personData[1]
+        user_id = int(id_num)
+        name = personData[user_id][0]
+        birthday = personData[user_id][1]
         print 'Person #{} is {} with a birthday of {}.'.format(
             user_id, name, str(birthday.date()))
     except LookupError as err:
