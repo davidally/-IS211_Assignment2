@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+"""Week 2 - Assignment 2"""
 
 import csv
 import urllib2
@@ -10,17 +11,43 @@ from pprint import pprint
 
 
 def downloadData(url):
+    """
+    Takes in a string containing a URL and returns
+    the raw data for processing. 
+
+    Args:
+        url (str): URL string.
+
+    Returns:
+        response: Raw text data from link.
+    """
 
     response = urllib2.urlopen(url)
     return response
 
 
 def processData(data):
+    """
+    Accepts raw text data from CSV file and processes
+    the data. This function formats the data then checks
+    if there are any bad values. Any rows containing an
+    invalid data format will not be inserted into the new
+    dictionary.
 
+    Args:
+        data (str): Raw text passed returned from downloadData().
+
+    Returns:
+        new_data (dict): A dictionary with valid data, with IDs mapped
+        to tuples of names and datetime objects.
+    """
+
+    # Getting a logger with the appropriate name
     error_logger = logging.getLogger('assignment2')
 
     new_data = {}
 
+    # Counter will track the ID
     counter = 1
     csv_data = csv.DictReader(data)
 
@@ -45,6 +72,16 @@ def processData(data):
 
 
 def displayPerson(id_num, personData):
+    """[summary]
+
+    Searches the returned dictionary from processData().
+    This function then returns the requested user information
+    in a formatted string. 
+
+    Args:
+        id_num (int): The user ID.
+        personData (dict): Dictionary containing user data.
+    """
 
     try:
         user_id = int(id_num)
@@ -59,12 +96,21 @@ def displayPerson(id_num, personData):
 
 
 def main():
+    """
+    This program requires a URL string linking to a CSV file to be
+    passed as an argument to a single parameter. The data from the 
+    file will be downloaded and processed. The data will be parsed 
+    and bad data will be discarded whilst being error logged. A user 
+    must input a valid ID in order to retrieve the user's data. In 
+    order to exit the program, a negative integer or 0 must be input.   
+    """
 
     parser = argparse.ArgumentParser()
     parser.add_argument('url', type=str,
                         help='Enter a link to a valid CSV file.')
     args = parser.parse_args()
 
+    # Setting logger level and output file
     logging.basicConfig(filename='error.log', level=logging.ERROR)
 
     try:
@@ -77,11 +123,10 @@ def main():
 
     while True:
         try:
-            id_input = raw_input('Enter a user ID for lookup: ')
+            id_input = int(raw_input('Enter a user ID for lookup: '))
 
-            if int(id_input) <= 0:
+            if id_input <= 0:
                 break
-
             displayPerson(id_input, personData)
         except ValueError:
             print 'Only integer values are accepted.'
